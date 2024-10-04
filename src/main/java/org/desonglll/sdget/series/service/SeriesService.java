@@ -1,5 +1,7 @@
 package org.desonglll.sdget.series.service;
 
+import org.desonglll.sdget.common.exception.EmptyListException;
+import org.desonglll.sdget.common.exception.NotFoundException;
 import org.desonglll.sdget.series.entity.Series;
 import org.desonglll.sdget.series.repository.SeriesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,23 +18,44 @@ import java.util.Optional;
  */
 @Service
 public class SeriesService {
+    private final SeriesRepository seriesRepository;
+
     @Autowired
-    private SeriesRepository seriesRepository;
+    public SeriesService(SeriesRepository seriesRepository) {
+        this.seriesRepository = seriesRepository;
+    }
 
     public List<Series> getAllSeries() {
-        return seriesRepository.findAll();
+        List<Series> seriesList = seriesRepository.findAll();
+        if (seriesList.isEmpty()) {
+            throw new EmptyListException("Series list is empty");
+        } else {
+            return seriesList;
+        }
     }
 
     public Series getSeriesById(Long id) {
-        return seriesRepository.getById(id);
+        Optional<Series> series = seriesRepository.findById(id);
+        if (series.isPresent()) {
+            return series.get();
+        } else {
+            throw new NotFoundException("Series not found to get with id " + id);
+        }
     }
 
     public Series addSeries(Series series) {
         return seriesRepository.save(series);
     }
 
-    public void deleteSeries(Long id) {
-        seriesRepository.deleteById(id);
+    public Series deleteSeries(Long id) {
+
+        if (seriesRepository.existsById(id)) {
+            Series deletedSeries = seriesRepository.getById(id);
+            seriesRepository.deleteById(id);
+            return deletedSeries;
+        } else {
+            throw new NotFoundException("Series not found to delete with id " + id);
+        }
     }
 
     public Series updateSeries(Series series) {
@@ -44,7 +67,7 @@ public class SeriesService {
             updatedSeries.setUpdatedTimestamp(OffsetDateTime.now());
             return seriesRepository.save(updatedSeries);
         } else {
-            throw new RuntimeException("Series not found with id " + series.getId());
+            throw new NotFoundException("Series not found to update with id " + series.getId());
         }
     }
 

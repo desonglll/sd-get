@@ -1,5 +1,6 @@
 package org.desonglll.sdget.series.controller;
 
+import org.desonglll.sdget.common.result.Result;
 import org.desonglll.sdget.series.dto.SeriesRequestDto;
 import org.desonglll.sdget.series.dto.SeriesResponseDto;
 import org.desonglll.sdget.series.entity.Series;
@@ -30,43 +31,43 @@ public class SeriesController {
     }
 
     @GetMapping
-    public ResponseEntity<List<SeriesResponseDto>> getAllSeries() {
+    public ResponseEntity<Result> getAllSeries() {
         List<Series> series = seriesService.getAllSeries();
         List<SeriesResponseDto> responseDtoList = series.stream().map(this::toResponseDto).collect(Collectors.toList());
-        return new ResponseEntity<>(responseDtoList, HttpStatus.OK);
+        Result result = Result.success("Get all series successfully.", responseDtoList);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SeriesResponseDto> getSeriesById(@PathVariable Long id) {
+    public ResponseEntity<Result> getSeriesById(@PathVariable Long id) {
         Series series = seriesService.getSeriesById(id);
-        SeriesResponseDto seriesResponseDto = new SeriesResponseDto();
-        seriesResponseDto.setId(series.getId());
-        seriesResponseDto.setName(series.getName());
-        seriesResponseDto.setDescription(series.getDescription());
-        seriesResponseDto.setCreatedTimestamp(series.getCreatedTimestamp());
-        seriesResponseDto.setUpdatedTimestamp(series.getUpdatedTimestamp());
-        return new ResponseEntity<>(seriesResponseDto, HttpStatus.OK);
+        SeriesResponseDto seriesResponseDto = this.toResponseDto(series);
+        Result result = Result.success("Get series by id " + id + " successfully.", seriesResponseDto);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<SeriesResponseDto> addSeries(@RequestBody SeriesRequestDto seriesRequestDto) {
+    public ResponseEntity<Result> addSeries(@RequestBody SeriesRequestDto seriesRequestDto) {
         Series series = new Series();
         series.setName(seriesRequestDto.getName());
         series.setDescription(seriesRequestDto.getDescription());
         series.setCreatedTimestamp(OffsetDateTime.now());
         series.setUpdatedTimestamp(OffsetDateTime.now());
         Series addedSeries = seriesService.addSeries(series);
-        SeriesResponseDto seriesResponseDto = this.toResponseDto(addedSeries);
-        return new ResponseEntity<>(seriesResponseDto, HttpStatus.OK);
+        Result result = Result.success("Add series successfully", this.toResponseDto(addedSeries));
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteSeries(@PathVariable Long id) {
-        seriesService.deleteSeries(id);
+    public ResponseEntity<Result> deleteSeries(@PathVariable Long id) {
+        Series deletedSeries = seriesService.deleteSeries(id);
+        SeriesResponseDto seriesResponseDto = this.toResponseDto(deletedSeries);
+        Result result = Result.success("Delete Series with " + id + " successfully.", seriesResponseDto);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SeriesResponseDto> updateSeries(@PathVariable Long id, @RequestBody SeriesRequestDto seriesDto) {
+    public ResponseEntity<Result> updateSeries(@PathVariable Long id, @RequestBody SeriesRequestDto seriesDto) {
         Series series = seriesService.getSeriesById(id);
         if (seriesDto.getName() != null) {
             series.setName(seriesDto.getName());
@@ -75,7 +76,8 @@ public class SeriesController {
             series.setDescription(seriesDto.getDescription());
         }
         Series updatedSeries = seriesService.updateSeries(series);
-        return new ResponseEntity<>(toResponseDto(updatedSeries), HttpStatus.OK);
+        Result result = Result.success("Update series with id: " + id + " successfully", toResponseDto(updatedSeries));
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     private SeriesResponseDto toResponseDto(Series series) {

@@ -1,9 +1,6 @@
 package org.desonglll.sdget.product.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
@@ -18,6 +15,7 @@ import java.time.OffsetDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Data
 @Table(name = "product")
 public class Product {
     @Id

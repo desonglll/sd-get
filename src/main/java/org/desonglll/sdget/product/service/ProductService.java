@@ -1,5 +1,7 @@
 package org.desonglll.sdget.product.service;
 
+import org.desonglll.sdget.common.exception.EmptyListException;
+import org.desonglll.sdget.common.exception.NotFoundException;
 import org.desonglll.sdget.product.entity.Product;
 import org.desonglll.sdget.product.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +18,26 @@ import java.util.Optional;
 @Service
 public class ProductService {
 
+    private final ProductRepository productRepository;
+
     @Autowired
-    private ProductRepository productRepository;
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
 
     public List<Product> getAllProducts() {
-        return productRepository.findAll();
+        List<Product> productList = productRepository.findAll();
+        if (productList.isEmpty()) {
+            throw new EmptyListException("Product list is empty");
+        } else {
+            return productList;
+        }
     }
 
     public Product addProduct(Product product) {
+        if (productRepository.existsById(product.getId())) {
+            throw new RuntimeException("Product already exists");
+        }
         return productRepository.save(product);
     }
 
@@ -32,12 +46,18 @@ public class ProductService {
         if (product.isPresent()) {
             return product.get();
         } else {
-            throw new RuntimeException("Product not found for id " + id);
+            throw new NotFoundException("Product not found to get with id: " + id);
         }
     }
 
-    public void deleteProduct(Long id) {
-        productRepository.deleteById(id);
+    public Product deleteProduct(Long id) {
+        if (productRepository.existsById(id)) {
+            Product deletedProduct = productRepository.getById(id);
+            productRepository.deleteById(id);
+            return deletedProduct;
+        } else {
+            throw new NotFoundException("Product not found to delete with id: " + id);
+        }
     }
 
     public Product updateProduct(Product product) {
@@ -54,7 +74,7 @@ public class ProductService {
             return productRepository.save(updatedProduct);
         } else {
             // 如果产品不存在，处理异常逻辑
-            throw new RuntimeException("Product not found with id: " + product.getId());
+            throw new NotFoundException("Product not found to update with id: " + product.getId());
         }
     }
 
