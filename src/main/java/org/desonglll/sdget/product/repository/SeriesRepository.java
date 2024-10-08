@@ -1,6 +1,6 @@
-package org.desonglll.sdget.series.repository;
+package org.desonglll.sdget.product.repository;
 
-import org.desonglll.sdget.series.entity.Series;
+import org.desonglll.sdget.product.entity.Series;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

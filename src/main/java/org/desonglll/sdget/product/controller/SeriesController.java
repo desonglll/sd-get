@@ -1,10 +1,10 @@
-package org.desonglll.sdget.series.controller;
+package org.desonglll.sdget.product.controller;
 
 import org.desonglll.sdget.common.result.Result;
-import org.desonglll.sdget.series.dto.SeriesRequestDto;
-import org.desonglll.sdget.series.dto.SeriesResponseDto;
-import org.desonglll.sdget.series.entity.Series;
-import org.desonglll.sdget.series.service.SeriesService;
+import org.desonglll.sdget.product.dto.SeriesRequestDto;
+import org.desonglll.sdget.product.dto.SeriesResponseDto;
+import org.desonglll.sdget.product.entity.Series;
+import org.desonglll.sdget.product.service.SeriesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

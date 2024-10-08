@@ -1,9 +1,9 @@
-package org.desonglll.sdget.series.service;
+package org.desonglll.sdget.product.service;
 
 import org.desonglll.sdget.common.exception.EmptyListException;
 import org.desonglll.sdget.common.exception.NotFoundException;
-import org.desonglll.sdget.series.entity.Series;
-import org.desonglll.sdget.series.repository.SeriesRepository;
+import org.desonglll.sdget.product.entity.Series;
+import org.desonglll.sdget.product.repository.SeriesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

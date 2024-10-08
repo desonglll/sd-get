@@ -1,11 +1,10 @@
-package org.desonglll.sdget.series.entity;
+package org.desonglll.sdget.product.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
 import java.time.OffsetDateTime;
 
 /**
@@ -13,23 +12,14 @@ import java.time.OffsetDateTime;
  * @date: 2024/9/30
  * @description:
  */
-@Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "series")
-public class Series {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+public class SeriesResponseDto {
     private Long id;
-    @Column(name = "name")
     private String name;
-    @Column(name = "description")
     private String description;
-    @Column(name = "created_timestamp")
     private OffsetDateTime createdTimestamp;
-    @Column(name = "updated_timestamp")
     private OffsetDateTime updatedTimestamp;
 }

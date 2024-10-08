@@ -1,4 +1,4 @@
-package org.desonglll.sdget.series.dto;
+package org.desonglll.sdget.news.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,15 +7,15 @@ import lombok.Setter;
 
 /**
  * @author: mikeshinoda
- * @date: 2024/9/30
+ * @date: 2024/10/8
  * @description:
  */
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SeriesRequestDto {
-    private Long id;
-    private String name;
-    private String description;
+@Setter
+@Getter
+public class NewsRequestDto {
+    private String title;
+    private String content;
+    private String newsColumn;
 }

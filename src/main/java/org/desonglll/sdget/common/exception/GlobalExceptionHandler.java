@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(EmptyListException.class)
-    public ResponseEntity<Result> handleEmptyListException(GeneralException ex) {
+    public ResponseEntity<Result> handleEmptyListException(EmptyListException ex) {
         Result result = new Result(0, "error", ex.getMessage(), null);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
